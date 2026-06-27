@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const resend = new Resend(apiKey)
 
     const { error } = await resend.emails.send({
-      from: 'GC Studio <onboarding@resend.dev>',
+      from: 'GC Corporation <onboarding@resend.dev>',
       to: ['luiz.gustavo.cunha2003@gmail.com'],
       subject: `Novo projeto: ${data.company || data.name}`,
       html: `

@@ -21,9 +21,7 @@ type FormData = z.infer<typeof schema>
 const BUDGETS = ['Não sei ainda', 'Até R$ 5k', 'R$ 5k-20k', 'R$ 20k-50k', 'Acima de R$ 50k']
 
 export default function Contact() {
-  const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [serverError, setServerError] = useState('')
 
   const {
     register,
@@ -35,34 +33,13 @@ export default function Contact() {
 
   const budget = useWatch({ control, name: 'budget' })
 
-  const onSubmit = async (data: FormData) => {
-    setSubmitting(true)
-    setServerError('')
-
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      })
-
-      if (!res.ok) {
-        const body = await res.json()
-        setServerError(body.error ?? 'Erro ao enviar.')
-        return
-      }
-
-      window.open(
-        buildWhatsAppLink({ name: data.name, company: data.company, message: data.message, budget: data.budget }),
-        '_blank',
-        'noopener,noreferrer'
-      )
-      setSuccess(true)
-    } catch {
-      setServerError('Erro de conexão. Tente novamente.')
-    } finally {
-      setSubmitting(false)
-    }
+  const onSubmit = (data: FormData) => {
+    window.open(
+      buildWhatsAppLink({ name: data.name, email: data.email, company: data.company, message: data.message, budget: data.budget }),
+      '_blank',
+      'noopener,noreferrer'
+    )
+    setSuccess(true)
   }
 
   return (
@@ -213,15 +190,9 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {serverError && (
-                  <p className="rounded-xl border p-3 text-center text-sm" style={{ color: '#f87171', borderColor: 'rgba(248,113,113,0.25)', background: 'rgba(248,113,113,0.06)' }}>
-                    {serverError}
-                  </p>
-                )}
-
-                <button type="submit" disabled={submitting} className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-55">
-                  {submitting ? 'Enviando...' : 'Enviar mensagem'}
-                  {!submitting && <ArrowRight size={16} aria-hidden="true" />}
+                <button type="submit" className="btn-primary w-full">
+                  Abrir WhatsApp com mensagem
+                  <ArrowRight size={16} aria-hidden="true" />
                 </button>
 
                 <p className="text-center text-xs" style={{ color: 'var(--text-dim)' }}>

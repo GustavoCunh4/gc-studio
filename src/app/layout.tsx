@@ -24,7 +24,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gcstudio.com.br'),
-  title: 'GC Studio — Software que trabalha por você',
+  title: 'GC Corporation — Software que trabalha por você',
   description:
     'Desenvolvemos software, automações e IA aplicada para empresas que precisam digitalizar e automatizar operações. Salvador, BA.',
   keywords: [
@@ -38,19 +38,19 @@ export const metadata: Metadata = {
     'Bahia',
   ],
   authors: [{ name: 'Gustavo Cunha' }],
-  creator: 'GC Studio',
+  creator: 'GC Corporation',
   openGraph: {
-    title: 'GC Studio — Software que trabalha por você',
+    title: 'GC Corporation — Software que trabalha por você',
     description:
       'Desenvolvemos software, automações e IA aplicada para empresas que precisam digitalizar e automatizar operações.',
     url: 'https://gcstudio.com.br',
-    siteName: 'GC Studio',
+    siteName: 'GC Corporation',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'GC Studio — Software que trabalha por você',
+        alt: 'GC Corporation — Software que trabalha por você',
       },
     ],
     locale: 'pt_BR',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'GC Studio — Software que trabalha por você',
+    title: 'GC Corporation — Software que trabalha por você',
     description:
       'Desenvolvemos software, automações e IA aplicada para empresas que precisam digitalizar e automatizar operações.',
     images: ['/og-image.png'],

@@ -79,18 +79,18 @@ export default function Header() {
             }
           }}
           className="group flex items-center gap-2.5"
-          aria-label="GC Studio - início"
+          aria-label="GC Corporation - início"
         >
           <Image
             src="/GC-Laranja-Transparente.png"
-            alt="GC Studio"
+            alt="GC Corporation"
             width={32}
             height={32}
             priority
             className="block h-8 w-8 object-contain transition-transform duration-300 group-hover:scale-105"
           />
           <span className="font-display text-base font-500 tracking-tight" style={{ color: 'var(--text-primary)' }}>
-            GC Studio
+            Corporation
           </span>
         </Link>
 

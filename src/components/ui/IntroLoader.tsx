@@ -345,7 +345,7 @@ export default function IntroLoader() {
       className={className}
       role="status"
       aria-live="polite"
-      aria-label={`Carregando GC Studio ${progress}%`}
+      aria-label={`Carregando GC Corporation ${progress}%`}
     >
       <LogoScene active={phase !== 'done'} />
 
@@ -360,7 +360,7 @@ export default function IntroLoader() {
 
       <div className="intro-progress">
         <div className="intro-progress-meta">
-          <span>GC Studio</span>
+          <span>GC Corporation</span>
           <span>{progress}%</span>
         </div>
         <div className="intro-progress-track">

@@ -10,9 +10,9 @@ import { CASES } from '@/data/caseStudies'
 import { type CaseStudy } from '@/types'
 
 export const metadata: Metadata = {
-  title: 'Projetos | GC Studio',
+  title: 'Projetos | GC Corporation',
   description:
-    'Conheça projetos da GC Studio em sistemas sob medida, automações e IA aplicada para empresas.',
+    'Conheça projetos da GC Corporation em sistemas sob medida, automações e IA aplicada para empresas.',
 }
 
 type DashboardData = CaseStudy['dashboard']

@@ -36,7 +36,7 @@ export default function About() {
     >
       <div className="container-shell">
         <div className="reveal mb-14 max-w-2xl md:mb-16">
-          <p className="section-kicker mb-4">Sobre a GC Studio</p>
+          <p className="section-kicker mb-4">Sobre a GC Corporation</p>
           <h2 className="section-title">Nascemos para falar a língua do seu negócio - não da tecnologia.</h2>
         </div>
 
@@ -44,7 +44,7 @@ export default function About() {
           <div className="reveal flex flex-col gap-9">
             <div className="flex flex-col gap-5">
               <p className="section-copy">
-                A GC Studio nasceu de uma observação simples: muitas empresas têm problemas reais
+                A GC Corporation nasceu de uma observação simples: muitas empresas têm problemas reais
                 que a tecnologia poderia resolver, mas não encontram parceiros que os entendam sem
                 precisar falar em código.
               </p>

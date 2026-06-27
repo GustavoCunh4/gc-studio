@@ -17,13 +17,13 @@ export default function Footer() {
             <div className="flex items-center gap-2.5">
               <Image
                 src="/GC-Laranja-Transparente.png"
-                alt="GC Studio"
+                alt="GC Corporation"
                 width={34}
                 height={34}
                 className="block h-[34px] w-[34px] object-contain"
               />
               <span className="font-display text-base font-500" style={{ color: 'var(--text-primary)' }}>
-                GC Studio
+                GC Corporation
               </span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -88,7 +88,7 @@ export default function Footer() {
 
         <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
           <p className="font-mono text-xs" style={{ color: 'var(--text-dim)' }}>
-            © {year} GC Studio - Salvador, BA
+            © {year} GC Corporation - Salvador, BA
           </p>
           <p className="font-mono text-xs" style={{ color: 'var(--text-dim)' }}>
             Feito para durar - e para escalar.
