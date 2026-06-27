@@ -598,8 +598,8 @@ section[id] {
 
 .btn-primary:hover {
   background: var(--accent-warm);
-  transform: translateY(-2px);
-  box-shadow: 0 18px 42px rgba(var(--accent-rgb), 0.28);
+  transform: translateY(-3px);
+  box-shadow: 0 22px 52px rgba(var(--accent-rgb), 0.38), 0 0 0 1px rgba(var(--accent-rgb), 0.14);
 }
 
 .btn-secondary {
@@ -612,8 +612,9 @@ section[id] {
 .btn-ghost:hover {
   border-color: var(--line-accent);
   color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(var(--accent-rgb), 0.08);
+  background: rgba(var(--accent-rgb), 0.05);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(var(--accent-rgb), 0.12);
 }
 
 .btn-primary:hover::before,
@@ -626,7 +627,7 @@ section[id] {
 .btn-primary:hover svg,
 .btn-secondary:hover svg,
 .btn-ghost:hover svg {
-  transform: translateX(3px);
+  transform: translateX(5px);
 }
 
 .btn-ghost {
@@ -634,10 +635,15 @@ section[id] {
   padding: 0.75rem 1rem;
 }
 
-.btn-primary:active,
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 14px rgba(var(--accent-rgb), 0.18);
+}
+
 .btn-secondary:active,
 .btn-ghost:active {
-  transform: scale(0.97);
+  transform: translateY(1px);
+  box-shadow: none;
 }
 
 .field-control {

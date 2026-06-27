@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react'
 
 const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false })
 
-const HEADLINE_PREFIX = 'Seu negócio no piloto automático, '
-const HEADLINE_ACCENT = 'do jeito certo.'
+const HEADLINE_PREFIX = 'Chega de planilha e processo manual. '
+const HEADLINE_ACCENT = 'Construímos o sistema certo.'
 const HEADLINE = `${HEADLINE_PREFIX}${HEADLINE_ACCENT}`
 const INTRO_STORAGE_KEY = 'gc-studio:intro-seen'
 
