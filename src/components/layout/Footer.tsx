@@ -64,7 +64,7 @@ export default function Footer() {
               </p>
               <ul className="flex flex-col gap-3">
                 {[
-                  ['LinkedIn', 'https://www.linkedin.com/company/gcstudio'],
+                  ['LinkedIn', 'https://www.linkedin.com/in/luizgustavocunha-dev/'],
                   ['WhatsApp', buildDirectWhatsAppLink()],
                   ['Email', 'mailto:contato@gcstudio.com.br'],
                 ].map(([label, href]) => (
