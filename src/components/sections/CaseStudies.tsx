@@ -45,7 +45,7 @@ function CaseCard({ case_: c }: CaseCardProps) {
     >
       {/* Visual placeholder */}
       <div
-        className="rounded-2xl aspect-[4/3] flex items-center justify-center border"
+        className="rounded-2xl aspect-4/3 flex items-center justify-center border"
         style={{
           background: 'var(--bg-elevated)',
           border: '1px solid var(--line)',
@@ -145,7 +145,7 @@ export default function CaseStudies() {
 
         <div className="mt-20 text-center">
           <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-            Tem um projeto em mente? Conta pra mim.
+            Tem um projeto em mente? A primeira conversa é gratuita.
           </p>
           <a
             href="#contact"

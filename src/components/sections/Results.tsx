@@ -9,9 +9,9 @@ const STATS = [
 
 const TESTIMONIAL = {
   quote:
-    'O Gustavo entregou o sistema em 3 semanas e funciona exatamente como eu precisava. Não perco mais tempo com planilha.',
+    'O sistema foi entregue em 3 semanas e funciona exatamente como precisávamos. Não perdemos mais tempo com planilha e hoje sabemos em tempo real como está o caixa.',
   name: 'Carlos M.',
-  role: 'Dono, Alpha Clean — Salvador, BA',
+  role: 'Proprietário — Alpha Clean, Salvador, BA',
 }
 
 export default function Results() {
@@ -65,7 +65,8 @@ export default function Results() {
           {/* CTA */}
           <div className="flex flex-col gap-5">
             <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              Esses resultados vêm de um processo que começa entendendo o negócio — não o código.
+              Esses resultados vêm de um processo que começa entendendo a operação do cliente — não o código.
+              Cada projeto tem como meta um resultado de negócio mensurável.
             </p>
             <a
               href="#contact"

@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { buildDirectWhatsAppLink } from '@/lib/whatsapp'
 import NavLine from '@/components/ui/NavLine'
 
 const NAV_LINKS = [
   { label: 'Serviços', href: '#services' },
   { label: 'Projetos', href: '#cases' },
   { label: 'Sobre', href: '#about' },
+  { label: 'FAQ', href: '#faq' },
   { label: 'Contato', href: '#contact' },
 ]
 
@@ -30,7 +30,7 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className="fixed top-0 left-0 right-0 z-[100] transition-all duration-500"
+      className="fixed top-0 left-0 right-0 z-100 transition-all duration-500"
       style={{
         backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
@@ -47,12 +47,12 @@ export default function Header() {
           aria-label="GC Studio — início"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/gc-logo.svg" alt="" width={28} height={28} style={{ objectFit: 'contain' }} aria-hidden="true" />
+          <img src="/GC-Laranja-Transparente.png" alt="GC Studio" width={30} height={30} style={{ objectFit: 'contain' }} />
           <span
             className="font-display font-500 text-base tracking-tight"
-            style={{ color: 'var(--text-primary)' }}
+            style={{ color: 'var(--text-primary)', letterSpacing: '-0.01em' }}
           >
-            Studio
+            GC Studio
           </span>
         </a>
 
@@ -75,13 +75,12 @@ export default function Header() {
         {/* CTA única */}
         <div className="flex items-center gap-3">
           <a
-            href={buildDirectWhatsAppLink()}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }) }}
             className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-display font-medium rounded-full transition-all duration-200 hover:opacity-90 active:scale-[0.97]"
             style={{ background: 'var(--accent)', color: 'var(--text-inverse)' }}
           >
-            Falar agora
+            Diagnóstico gratuito
           </a>
 
           {/* Hamburger */}
@@ -134,13 +133,12 @@ export default function Header() {
             </a>
           ))}
           <a
-            href={buildDirectWhatsAppLink()}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); scrollTo('#contact') }}
             className="mt-2 px-6 py-3.5 text-sm font-display font-medium rounded-full text-center"
             style={{ background: 'var(--accent)', color: 'var(--text-inverse)' }}
           >
-            Falar agora
+            Diagnóstico gratuito
           </a>
         </div>
       )}

@@ -91,18 +91,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  cursor: none;
 }
 
-/* Cursor oculto — substituído pelo cursor custom */
-*, *::before, *::after {
-  cursor: none !important;
-}
-
-/* Acessibilidade: restaurar cursor no reduced-motion */
+/* Acessibilidade: reduzir movimento */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    cursor: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -183,6 +176,11 @@ body::before {
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-void); }
 ::-webkit-scrollbar-thumb { background: var(--accent-deep); border-radius: 2px; }
+
+/* ─── Scroll offset (header fixo de 64px + buffer) ─────────────── */
+section[id] {
+  scroll-margin-top: 72px;
+}
 
 /* ─── Focus visible ─────────────────────────────────────────────── */
 :focus-visible {

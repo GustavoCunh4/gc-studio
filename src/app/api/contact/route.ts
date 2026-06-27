@@ -8,8 +8,8 @@ const schema = z.object({
   whatsapp: z.string().optional(),
   company: z.string().optional(),
   message: z.string().min(10, 'Descreva o desafio'),
-  budget: z.string().min(1, 'Selecione um orçamento'),
-  deadline: z.string().min(1, 'Selecione um prazo'),
+  budget: z.string().optional(),
+  deadline: z.string().optional(),
 })
 
 export async function POST(req: NextRequest) {
