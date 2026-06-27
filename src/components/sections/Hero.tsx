@@ -6,132 +6,96 @@ import { buildDirectWhatsAppLink } from '@/lib/whatsapp'
 
 const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false })
 
-const HEADLINE_LINES = ['Transformamos operações', 'em sistemas inteligentes.']
-const EYEBROW = '// GC Studio — Software que trabalha por você'
-
 export default function Hero() {
-  const eyebrowRef = useRef<HTMLSpanElement>(null)
-  const line1Ref = useRef<HTMLSpanElement>(null)
-  const line2Ref = useRef<HTMLSpanElement>(null)
-  const subtitleRef = useRef<HTMLParagraphElement>(null)
+  const headlineRef = useRef<HTMLHeadingElement>(null)
+  const subRef = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      // Show everything immediately
-      ;[eyebrowRef, line1Ref, line2Ref, subtitleRef, ctaRef].forEach((r) => {
-        if (r.current) r.current.style.opacity = '1'
+      ;[headlineRef, subRef, ctaRef].forEach((r) => {
+        if (r.current) { r.current.style.opacity = '1'; r.current.style.transform = 'none' }
       })
       return
     }
 
-    const typeText = (el: HTMLElement | null, text: string, delay: number, onDone?: () => void) => {
+    const els = [headlineRef.current, subRef.current, ctaRef.current]
+    els.forEach((el, i) => {
       if (!el) return
-      el.textContent = ''
-      let i = 0
-      const timer = setTimeout(() => {
-        const interval = setInterval(() => {
-          if (i < text.length) {
-            el.textContent += text[i]
-            i++
-          } else {
-            clearInterval(interval)
-            onDone?.()
-          }
-        }, 28)
-      }, delay)
-      return () => { clearTimeout(timer) }
-    }
-
-    const cleanups: ((() => void) | undefined)[] = []
-
-    const c1 = typeText(eyebrowRef.current, EYEBROW, 200, () => {
-      const c2 = typeText(line1Ref.current, HEADLINE_LINES[0], 0, () => {
-        const c3 = typeText(line2Ref.current, HEADLINE_LINES[1], 100, () => {
-          if (subtitleRef.current) {
-            subtitleRef.current.style.transition = 'opacity 0.6s ease, transform 0.6s ease'
-            subtitleRef.current.style.opacity = '1'
-            subtitleRef.current.style.transform = 'translateY(0)'
-          }
-          setTimeout(() => {
-            if (ctaRef.current) {
-              ctaRef.current.style.transition = 'opacity 0.5s ease, transform 0.5s ease'
-              ctaRef.current.style.opacity = '1'
-              ctaRef.current.style.transform = 'translateY(0)'
-            }
-          }, 300)
-        })
-        cleanups.push(c3)
-      })
-      cleanups.push(c2)
+      setTimeout(() => {
+        el.style.transition = 'opacity 0.8s ease, transform 0.8s ease'
+        el.style.opacity = '1'
+        el.style.transform = 'translateY(0)'
+      }, 300 + i * 200)
     })
-    cleanups.push(c1)
-
-    return () => cleanups.forEach((c) => c?.())
   }, [])
 
   return (
     <section
       id="hero"
-      className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden"
+      className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-6"
       style={{ background: 'var(--bg-void)' }}
     >
-      {/* Canvas background */}
       <HeroCanvas />
 
-      {/* Radial glow */}
+      {/* Glow central */}
       <div
         className="absolute inset-0 pointer-events-none"
         aria-hidden="true"
         style={{
           background:
-            'radial-gradient(ellipse 60% 40% at 50% 60%, rgba(255,102,0,0.07) 0%, transparent 70%)',
+            'radial-gradient(ellipse 50% 35% at 50% 65%, rgba(255,102,0,0.08) 0%, transparent 70%)',
         }}
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-6">
-        {/* Eyebrow */}
-        <span
-          ref={eyebrowRef}
-          className="font-mono text-xs md:text-sm tracking-widest"
-          style={{ color: 'var(--accent)', minHeight: '1.2em', display: 'block' }}
-          aria-label={EYEBROW}
-        />
+      <div className="relative z-10 flex flex-col items-center text-center gap-8 max-w-3xl mx-auto">
+        {/* Logo mark */}
+        <div className="flex flex-col items-center gap-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/gc-logo.svg" alt="GC Studio logo" width={72} height={72} style={{ objectFit: 'contain' }} />
+          <span
+            className="font-mono text-xs tracking-[0.25em] uppercase"
+            style={{ color: 'var(--text-dim)' }}
+          >
+            GC Studio
+          </span>
+        </div>
 
-        {/* H1 */}
-        <h1 className="flex flex-col items-center gap-1">
-          <span
-            ref={line1Ref}
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-500 tracking-tight leading-none"
-            style={{ color: 'var(--text-primary)', minHeight: '1.1em', display: 'block' }}
-          />
-          <span
-            ref={line2Ref}
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-500 tracking-tight leading-none"
-            style={{ color: 'var(--accent)', minHeight: '1.1em', display: 'block' }}
-          />
+        {/* Headline */}
+        <h1
+          ref={headlineRef}
+          className="font-display font-500 tracking-tight leading-[1.05]"
+          style={{
+            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+            color: 'var(--text-primary)',
+            opacity: 0,
+            transform: 'translateY(20px)',
+          }}
+        >
+          Transformamos operações
+          <br />
+          <span style={{ color: 'var(--accent)' }}>em sistemas inteligentes.</span>
         </h1>
 
         {/* Subtitle */}
         <p
-          ref={subtitleRef}
-          className="max-w-xl text-base md:text-lg leading-relaxed"
+          ref={subRef}
+          className="text-lg md:text-xl leading-relaxed max-w-xl"
           style={{
             color: 'var(--text-secondary)',
             opacity: 0,
-            transform: 'translateY(16px)',
+            transform: 'translateY(20px)',
           }}
         >
-          Desenvolvemos software, automações e IA aplicada para empresas que precisam de mais do
-          que uma landing page.
+          Software, automação e IA para empresas que precisam de mais do que uma landing page.
         </p>
 
         {/* CTAs */}
         <div
           ref={ctaRef}
-          className="flex flex-col sm:flex-row items-center gap-4 mt-2"
-          style={{ opacity: 0, transform: 'translateY(16px)' }}
+          className="flex flex-col sm:flex-row items-center gap-3"
+          style={{ opacity: 0, transform: 'translateY(20px)' }}
         >
           <a
             href="#services"
@@ -139,11 +103,8 @@ export default function Hero() {
               e.preventDefault()
               document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' })
             }}
-            className="px-8 py-4 rounded-full font-display font-medium text-sm transition-all duration-200 hover:opacity-90 active:scale-95"
-            style={{
-              background: 'var(--accent)',
-              color: 'var(--text-inverse)',
-            }}
+            className="px-7 py-3.5 rounded-full font-display font-medium text-sm transition-all duration-200 hover:opacity-90 active:scale-[0.97]"
+            style={{ background: 'var(--accent)', color: 'var(--text-inverse)' }}
           >
             Ver o que fazemos
           </a>
@@ -151,32 +112,26 @@ export default function Hero() {
             href={buildDirectWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-4 rounded-full font-display font-medium text-sm border transition-all duration-200 hover:border-accent hover:text-accent active:scale-95"
-            style={{
-              border: '1px solid var(--line-bright)',
-              color: 'var(--text-primary)',
-            }}
+            className="px-7 py-3.5 rounded-full font-display text-sm transition-all duration-200 hover:text-accent"
+            style={{ color: 'var(--text-secondary)' }}
           >
-            Falar com Gustavo ↗
+            Falar com Gustavo →
           </a>
         </div>
+      </div>
 
-        {/* Scroll indicator */}
+      {/* Scroll */}
+      <div
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        aria-hidden="true"
+      >
         <div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          aria-hidden="true"
-        >
-          <span className="text-xs font-mono tracking-widest" style={{ color: 'var(--text-dim)' }}>
-            scroll
-          </span>
-          <div
-            className="w-px h-12"
-            style={{
-              background: 'linear-gradient(to bottom, var(--accent), transparent)',
-              animation: 'pulse 2s ease-in-out infinite',
-            }}
-          />
-        </div>
+          className="w-px h-10"
+          style={{
+            background: 'linear-gradient(to bottom, var(--accent), transparent)',
+            animation: 'pulse 2s ease-in-out infinite',
+          }}
+        />
       </div>
     </section>
   )
