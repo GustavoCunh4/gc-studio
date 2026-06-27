@@ -4,7 +4,7 @@ export const CASES: CaseStudy[] = [
   {
     id: 'alpha-clean',
     client: 'Alpha Clean',
-    title: 'Sistema de gestão para lava-rápido',
+    title: 'Sistema de gestão para estética automotiva',
     problem:
       'Agendamentos pelo WhatsApp sem controle, caixa anotado em papel e dificuldade para saber o faturamento do dia.',
     solution:
