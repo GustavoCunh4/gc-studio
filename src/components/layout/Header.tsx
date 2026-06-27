@@ -47,7 +47,7 @@ export default function Header() {
           aria-label="GC Studio — início"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/gc-logo.svg" alt="GC Studio" width={30} height={30} style={{ objectFit: 'contain' }} />
+          <img src="/GC-Laranja-Transparente.png" alt="GC Studio" width={30} height={30} style={{ objectFit: 'contain', display: 'block' }} />
           <span
             className="font-display font-500 text-base tracking-tight"
             style={{ color: 'var(--text-primary)', letterSpacing: '-0.01em' }}

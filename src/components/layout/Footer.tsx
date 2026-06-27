@@ -16,11 +16,11 @@ export default function Footer() {
             <div className="flex items-center gap-2.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/gc-logo.svg"
+                src="/GC-Laranja-Transparente.png"
                 alt="GC Studio"
                 width={32}
                 height={32}
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: 'contain', display: 'block' }}
               />
               <span className="font-display font-500 text-base" style={{ color: 'var(--text-primary)' }}>
                 GC Studio
