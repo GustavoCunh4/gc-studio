@@ -283,6 +283,9 @@ export default function IntroLoader() {
       return () => window.cancelAnimationFrame(frame)
     }
 
+    // Marca como visto imediatamente: se o usuário navegar para outra página
+    // durante a animação, o intro não reinicia na página seguinte.
+    saveIntroSeen()
     root.classList.add('intro-scroll-lock')
 
     const schedule = (callback: () => void, delay: number) => {
@@ -295,7 +298,6 @@ export default function IntroLoader() {
       schedule(() => setPhase('opening'), prefersReducedMotion ? 80 : 180)
       schedule(() => setPhase('done'), prefersReducedMotion ? 360 : 1250)
       schedule(() => {
-        saveIntroSeen()
         markComplete()
         setVisible(false)
       }, prefersReducedMotion ? 520 : 1640)
