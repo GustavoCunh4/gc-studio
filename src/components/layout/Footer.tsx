@@ -16,7 +16,7 @@ export default function Footer() {
             <div className="flex items-center gap-2.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/GC-Laranja-Transparente.png"
+                src="/gc-logo.svg"
                 alt="GC Studio"
                 width={32}
                 height={32}

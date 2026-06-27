@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
-import { buildDirectWhatsAppLink } from '@/lib/whatsapp'
 
 const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false })
 
@@ -10,17 +9,16 @@ export default function Hero() {
   const headlineRef = useRef<HTMLHeadingElement>(null)
   const subRef = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
-  const badgeRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      ;[badgeRef, headlineRef, subRef, ctaRef].forEach((r) => {
+      ;[headlineRef, subRef, ctaRef].forEach((r) => {
         if (r.current) { r.current.style.opacity = '1'; r.current.style.transform = 'none' }
       })
       return
     }
 
-    const els = [badgeRef.current, headlineRef.current, subRef.current, ctaRef.current]
+    const els = [headlineRef.current, subRef.current, ctaRef.current]
     els.forEach((el, i) => {
       if (!el) return
       setTimeout(() => {
@@ -51,23 +49,6 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center gap-8 max-w-3xl mx-auto">
-
-        {/* Badge */}
-        <div
-          ref={badgeRef}
-          className="flex items-center gap-2.5 px-4 py-2 rounded-full border"
-          style={{
-            border: '1px solid var(--line-accent)',
-            background: 'rgba(255,102,0,0.06)',
-            opacity: 0,
-            transform: 'translateY(16px)',
-          }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
-          <span className="font-mono text-xs tracking-widest uppercase" style={{ color: 'var(--accent)' }}>
-            Aceitando projetos — Salvador, BA
-          </span>
-        </div>
 
         {/* Headline */}
         <h1
