@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
+import IntroLoader from '@/components/ui/IntroLoader'
 
 const LenisProvider = dynamic(
   () => import('@/components/providers/LenisProvider'),
@@ -46,6 +47,7 @@ function RevealObserver() {
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <LenisProvider>
+      <IntroLoader />
       <RevealObserver />
       {children}
     </LenisProvider>

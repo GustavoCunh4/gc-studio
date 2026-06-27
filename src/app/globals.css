@@ -107,6 +107,11 @@ main {
   isolation: isolate;
 }
 
+.intro-scroll-lock,
+.intro-scroll-lock body {
+  overflow: hidden;
+}
+
 /* Acessibilidade: reduzir movimento */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -215,6 +220,141 @@ code, pre, .mono {
 
 @keyframes type-caret {
   50% { opacity: 0; }
+}
+
+/* Intro loader */
+.intro-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 26%),
+    var(--bg-void);
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.42s var(--ease-out), visibility 0.42s var(--ease-out);
+}
+
+.intro-loader-done {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.intro-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.intro-scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.intro-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 50.08%;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 34%),
+    linear-gradient(115deg, rgba(255, 102, 0, 0.08), transparent 38%),
+    #08080b;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transition: transform 0.34s var(--ease-out);
+  will-change: transform;
+}
+
+.intro-loader-opening .intro-panel,
+.intro-loader-done .intro-panel {
+  transition-duration: 1.05s;
+  transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.intro-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.36;
+}
+
+.intro-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(var(--accent-rgb), 0.72), transparent);
+  box-shadow: 0 0 34px rgba(var(--accent-rgb), 0.38);
+}
+
+.intro-panel-left {
+  left: 0;
+}
+
+.intro-panel-left::after {
+  right: 0;
+}
+
+.intro-panel-right {
+  right: 0;
+}
+
+.intro-panel-right::after {
+  left: 0;
+}
+
+.intro-progress {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(2.25rem, 8vh, 5rem);
+  z-index: 3;
+  width: min(520px, calc(100vw - 2.5rem));
+  transform: translateX(-50%);
+  transition: opacity 0.28s var(--ease-out), transform 0.28s var(--ease-out);
+}
+
+.intro-loader-opening .intro-progress,
+.intro-loader-done .intro-progress {
+  opacity: 0;
+  transform: translate(-50%, 12px);
+}
+
+.intro-progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.intro-progress-track {
+  height: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.intro-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent), var(--accent-warm));
+  box-shadow: 0 0 24px rgba(var(--accent-rgb), 0.44);
+  transition: width 0.12s linear;
 }
 
 /* ─── Typewriter scroll-driven ───────────────────────────────────── */
@@ -485,6 +625,13 @@ section[id] {
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-left, .marquee-right { animation: none; }
+  .intro-loader,
+  .intro-panel,
+  .intro-progress,
+  .intro-progress-fill {
+    transition-duration: 0.01ms !important;
+  }
+
   .interactive-lift,
   .interactive-lift:hover,
   .btn-primary,
@@ -495,6 +642,15 @@ section[id] {
 }
 
 @media (max-width: 640px) {
+  .intro-progress {
+    bottom: 2rem;
+    width: min(360px, calc(100vw - 2rem));
+  }
+
+  .intro-progress-meta {
+    font-size: 0.66rem;
+  }
+
   .btn-primary,
   .btn-secondary {
     width: 100%;

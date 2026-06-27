@@ -18,26 +18,42 @@ function TypewriterHeadline() {
 
   useEffect(() => {
     const total = HEADLINE.length
+    let hasStarted = false
+    let frame = 0
+    let interval = 0
+    let startDelay = 0
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const frame = requestAnimationFrame(() => setTypedCount(total))
-      return () => cancelAnimationFrame(frame)
+    const startTyping = () => {
+      if (hasStarted) return
+      hasStarted = true
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        frame = requestAnimationFrame(() => setTypedCount(total))
+        return
+      }
+
+      let index = 0
+      startDelay = window.setTimeout(() => {
+        interval = window.setInterval(() => {
+          index += 1
+          setTypedCount(Math.min(index, total))
+
+          if (index >= total) {
+            window.clearInterval(interval)
+          }
+        }, 42)
+      }, 260)
     }
 
-    let index = 0
-    let interval = 0
-    const startDelay = window.setTimeout(() => {
-      interval = window.setInterval(() => {
-        index += 1
-        setTypedCount(Math.min(index, total))
-
-        if (index >= total) {
-          window.clearInterval(interval)
-        }
-      }, 42)
-    }, 260)
+    if (document.documentElement.dataset.introComplete === 'true' || !document.querySelector('.intro-loader')) {
+      startTyping()
+    } else {
+      window.addEventListener('gc:intro-complete', startTyping, { once: true })
+    }
 
     return () => {
+      window.removeEventListener('gc:intro-complete', startTyping)
+      cancelAnimationFrame(frame)
       window.clearTimeout(startDelay)
       window.clearInterval(interval)
     }
