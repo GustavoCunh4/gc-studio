@@ -12,12 +12,17 @@ const schema = z.object({
   deadline: z.string().min(1, 'Selecione um prazo'),
 })
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const data = schema.parse(body)
+
+    const apiKey = process.env.RESEND_API_KEY
+    if (!apiKey) {
+      console.error('RESEND_API_KEY not set')
+      return NextResponse.json({ error: 'Configuração de email ausente' }, { status: 500 })
+    }
+    const resend = new Resend(apiKey)
 
     const { error } = await resend.emails.send({
       from: 'GC Studio <onboarding@resend.dev>',
