@@ -17,6 +17,35 @@ export interface CaseStudy {
   result: string
   stack: string[]
   image: string
+  dashboard: {
+    label: string
+    status: string
+    variant: 'operations' | 'automation'
+    metrics: {
+      label: string
+      value: string
+      detail: string
+    }[]
+    bars: {
+      label: string
+      value: string
+      width: string
+      tone?: 'accent' | 'muted'
+    }[]
+    activities: {
+      label: string
+      value: string
+    }[]
+    highlight: {
+      label: string
+      value: string
+      detail: string
+    }
+    secondary: {
+      label: string
+      value: string
+    }[]
+  }
   reverse?: boolean
 }
 
