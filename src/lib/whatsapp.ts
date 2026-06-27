@@ -1,4 +1,4 @@
-const PHONE = process.env.NEXT_PUBLIC_WA_PHONE ?? '5571999999999'
+const PHONE = process.env.NEXT_PUBLIC_WA_PHONE ?? '5571991156488'
 
 export function buildWhatsAppLink(data: {
   name: string

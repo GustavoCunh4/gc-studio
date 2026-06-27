@@ -9,8 +9,8 @@ const LINKS = {
     { label: 'Contato', href: '#contact' },
   ],
   social: [
-    { label: 'GitHub', href: 'https://github.com/gustavocc' },
-    { label: 'LinkedIn', href: 'https://linkedin.com/in/gustavocunha' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/luizgustavocunha-dev/' },
+    { label: 'GitHub', href: 'https://github.com/GustavoCunh4' },
     { label: 'WhatsApp', href: buildDirectWhatsAppLink() },
   ],
 }
