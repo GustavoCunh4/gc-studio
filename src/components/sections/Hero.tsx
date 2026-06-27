@@ -2,8 +2,100 @@
 
 import dynamic from 'next/dynamic'
 import { ArrowRight, Sparkles } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false })
+
+const HEADLINE_PREFIX = 'Seu negócio no piloto automático, '
+const HEADLINE_ACCENT = 'do jeito certo.'
+const HEADLINE = `${HEADLINE_PREFIX}${HEADLINE_ACCENT}`
+
+function TypewriterText({
+  text,
+  offset,
+  typedCount,
+  color,
+}: {
+  text: string
+  offset: number
+  typedCount: number
+  color?: string
+}) {
+  return (
+    <>
+      {Array.from(text).map((char, index) => {
+        const visible = typedCount > offset + index
+
+        return (
+          <span
+            key={`${char}-${index}`}
+            className="typewriter-char"
+            style={{ color, opacity: visible ? 1 : 0 }}
+            aria-hidden="true"
+          >
+            {char}
+          </span>
+        )
+      })}
+    </>
+  )
+}
+
+function TypewriterHeadline() {
+  const [typedCount, setTypedCount] = useState(0)
+
+  useEffect(() => {
+    const total = HEADLINE.length
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const frame = requestAnimationFrame(() => setTypedCount(total))
+      return () => cancelAnimationFrame(frame)
+    }
+
+    let index = 0
+    let interval = 0
+    const startDelay = window.setTimeout(() => {
+      interval = window.setInterval(() => {
+        index += 1
+        setTypedCount(Math.min(index, total))
+
+        if (index >= total) {
+          window.clearInterval(interval)
+        }
+      }, 42)
+    }, 260)
+
+    return () => {
+      window.clearTimeout(startDelay)
+      window.clearInterval(interval)
+    }
+  }, [])
+
+  return (
+    <h1
+      className="font-display font-500 tracking-tight"
+      aria-label={HEADLINE}
+      style={{
+        fontSize: 'clamp(2.65rem, 7vw, 5.6rem)',
+        lineHeight: 0.98,
+        color: 'var(--text-primary)',
+      }}
+    >
+      <TypewriterText text={HEADLINE_PREFIX} offset={0} typedCount={typedCount} />
+      <TypewriterText
+        text={HEADLINE_ACCENT}
+        offset={HEADLINE_PREFIX.length}
+        typedCount={typedCount}
+        color="var(--accent)"
+      />
+      <span
+        className="typewriter-caret"
+        aria-hidden="true"
+        style={{ opacity: typedCount < HEADLINE.length ? 1 : 0 }}
+      />
+    </h1>
+  )
+}
 
 export default function Hero() {
   const scrollTo = (selector: string) => {
@@ -39,18 +131,7 @@ export default function Hero() {
             Automação, sistemas e IA aplicada
           </div>
 
-          <h1
-            className="font-display font-500 tracking-tight"
-            style={{
-              fontSize: 'clamp(2.65rem, 7vw, 5.6rem)',
-              lineHeight: 0.98,
-              color: 'var(--text-primary)',
-              animation: 'hero-lift 800ms var(--ease-out) 80ms both',
-            }}
-          >
-            Seu negócio no piloto automático,{' '}
-            <span style={{ color: 'var(--accent)' }}>do jeito certo.</span>
-          </h1>
+          <TypewriterHeadline />
 
           <p
             className="mt-7 max-w-2xl text-base leading-relaxed sm:text-lg md:text-xl"

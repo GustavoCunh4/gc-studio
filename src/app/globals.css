@@ -131,25 +131,29 @@ code, pre, .mono {
 /* ─── Scroll Reveal ─────────────────────────────────────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+  transform: translateY(34px);
+  transition: opacity 0.72s var(--ease-out), transform 0.72s var(--ease-out), filter 0.72s var(--ease-out);
+  filter: blur(5px);
   will-change: opacity, transform;
 }
 
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+  filter: blur(0);
 }
 
 .reveal-scale {
   opacity: 0;
-  transform: translateY(24px) scale(0.98);
-  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+  transform: translateY(30px) scale(0.975);
+  transition: opacity 0.72s var(--ease-out), transform 0.72s var(--ease-out), filter 0.72s var(--ease-out);
+  filter: blur(5px);
 }
 
 .reveal-scale.is-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 
 /* Delay variants */
@@ -161,6 +165,30 @@ code, pre, .mono {
 @keyframes hero-lift {
   from { transform: translateY(18px); }
   to { transform: translateY(0); }
+}
+
+.typewriter-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.typewriter-char {
+  transition: opacity 0.08s linear;
+}
+
+.typewriter-caret {
+  display: inline-block;
+  width: 0.055em;
+  height: 0.82em;
+  margin-left: 0.08em;
+  transform: translateY(0.08em);
+  border-radius: 999px;
+  background: var(--accent);
+  animation: type-caret 0.75s steps(1) infinite;
+}
+
+@keyframes type-caret {
+  50% { opacity: 0; }
 }
 
 /* ─── Typewriter scroll-driven ───────────────────────────────────── */

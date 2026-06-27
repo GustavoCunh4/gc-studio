@@ -3,161 +3,199 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
-const PARTICLE_COUNT = 90
-const LINK_DISTANCE = 120
 const ACCENT_COLOR = new THREE.Color('#ff6600')
+const WARM_COLOR = new THREE.Color('#ff9a3d')
 
 export default function HeroCanvas() {
   const mountRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    if (window.matchMedia('(pointer: coarse)').matches) return
 
     const mount = mountRef.current
     if (!mount) return
 
-    // Scene
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches
+    const particleCount = coarsePointer ? 56 : 128
+    const linkDistance = coarsePointer ? 96 : 140
+    const repelDistance = coarsePointer ? 0 : 96
+    const bounds = { width: mount.clientWidth, height: mount.clientHeight }
+    const mouse = { x: 0, y: 0, active: false }
+
     const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      mount.clientWidth / mount.clientHeight,
-      0.1,
-      1000
-    )
-    camera.position.z = 300
+    const camera = new THREE.PerspectiveCamera(58, bounds.width / bounds.height, 0.1, 1000)
+    camera.position.z = 320
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-    renderer.setSize(mount.clientWidth, mount.clientHeight)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarsePointer ? 1.5 : 2))
+    renderer.setSize(bounds.width, bounds.height)
+    renderer.domElement.style.opacity = coarsePointer ? '0.45' : '0.72'
+    renderer.domElement.style.filter = 'drop-shadow(0 0 18px rgba(255, 102, 0, 0.18))'
     mount.appendChild(renderer.domElement)
 
-    // Particles
-    const positions = new Float32Array(PARTICLE_COUNT * 3)
-    const velocities: { x: number; y: number }[] = []
-    const W = mount.clientWidth
-    const H = mount.clientHeight
+    const positions = new Float32Array(particleCount * 3)
+    const colors = new Float32Array(particleCount * 3)
+    const velocities: { x: number; y: number; phase: number; drift: number }[] = []
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      positions[i * 3]     = (Math.random() - 0.5) * W
-      positions[i * 3 + 1] = (Math.random() - 0.5) * H
-      positions[i * 3 + 2] = 0
-      velocities.push({
-        x: (Math.random() - 0.5) * 0.3,
-        y: (Math.random() - 0.5) * 0.3,
-      })
+    const seedParticles = () => {
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * bounds.width
+        positions[i * 3 + 1] = (Math.random() - 0.5) * bounds.height
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 80
+
+        const mix = Math.random() * 0.45
+        const color = ACCENT_COLOR.clone().lerp(WARM_COLOR, mix)
+        colors[i * 3] = color.r
+        colors[i * 3 + 1] = color.g
+        colors[i * 3 + 2] = color.b
+
+        velocities.push({
+          x: (Math.random() - 0.5) * (coarsePointer ? 0.22 : 0.34),
+          y: (Math.random() - 0.5) * (coarsePointer ? 0.22 : 0.34),
+          phase: Math.random() * Math.PI * 2,
+          drift: 0.18 + Math.random() * 0.32,
+        })
+      }
     }
 
-    const geo = new THREE.BufferGeometry()
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    seedParticles()
 
-    const mat = new THREE.PointsMaterial({
+    const particleGeo = new THREE.BufferGeometry()
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+
+    const particleMat = new THREE.PointsMaterial({
       color: ACCENT_COLOR,
-      size: 2.5,
+      size: coarsePointer ? 2.2 : 2.8,
       transparent: true,
-      opacity: 0.7,
+      opacity: coarsePointer ? 0.78 : 0.9,
+      vertexColors: true,
       sizeAttenuation: false,
     })
 
-    const points = new THREE.Points(geo, mat)
+    const points = new THREE.Points(particleGeo, particleMat)
     scene.add(points)
 
-    // Lines
     const lineGeo = new THREE.BufferGeometry()
+    const linePositions = new Float32Array(particleCount * particleCount * 6)
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3))
+
     const lineMat = new THREE.LineBasicMaterial({
       color: ACCENT_COLOR,
       transparent: true,
-      opacity: 0.12,
-      vertexColors: false,
+      opacity: coarsePointer ? 0.14 : 0.2,
     })
-    const linePositions = new Float32Array(PARTICLE_COUNT * PARTICLE_COUNT * 6)
-    lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3))
-    const lineSegments = new THREE.LineSegments(lineGeo, lineMat)
-    scene.add(lineSegments)
 
-    // Mouse
-    const mouse = { x: 0, y: 0 }
-    const onMove = (e: MouseEvent) => {
-      mouse.x = (e.clientX - W / 2)
-      mouse.y = -(e.clientY - H / 2)
+    const lines = new THREE.LineSegments(lineGeo, lineMat)
+    scene.add(lines)
+
+    const onMove = (event: MouseEvent) => {
+      mouse.active = true
+      mouse.x = event.clientX - bounds.width / 2
+      mouse.y = -(event.clientY - bounds.height / 2)
     }
-    window.addEventListener('mousemove', onMove)
 
-    // Animate
-    let animId: number
+    const onLeave = () => {
+      mouse.active = false
+    }
 
-    const animate = () => {
-      animId = requestAnimationFrame(animate)
+    const onResize = () => {
+      bounds.width = mount.clientWidth
+      bounds.height = mount.clientHeight
+      camera.aspect = bounds.width / bounds.height
+      camera.updateProjectionMatrix()
+      renderer.setSize(bounds.width, bounds.height)
+    }
 
-      const pos = geo.attributes.position as THREE.BufferAttribute
+    window.addEventListener('mousemove', onMove, { passive: true })
+    window.addEventListener('mouseleave', onLeave)
+    window.addEventListener('resize', onResize)
 
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        let x = pos.getX(i) + velocities[i].x
-        let y = pos.getY(i) + velocities[i].y
+    let animationId = 0
+    const startedAt = performance.now()
 
-        // Mouse repel
-        const dx = x - mouse.x
-        const dy = y - mouse.y
-        const dist = Math.hypot(dx, dy)
-        if (dist < 80) {
-          const force = (80 - dist) / 80
-          x += (dx / dist) * force * 1.5
-          y += (dy / dist) * force * 1.5
+    const animate = (now: number) => {
+      animationId = requestAnimationFrame(animate)
+      const elapsed = (now - startedAt) * 0.001
+      const pos = particleGeo.attributes.position as THREE.BufferAttribute
+
+      for (let i = 0; i < particleCount; i++) {
+        const velocity = velocities[i]
+        let x = pos.getX(i) + velocity.x + Math.sin(elapsed * velocity.drift + velocity.phase) * 0.08
+        let y = pos.getY(i) + velocity.y + Math.cos(elapsed * velocity.drift + velocity.phase) * 0.08
+        const z = Math.sin(elapsed * 0.55 + velocity.phase) * 42
+
+        if (mouse.active && repelDistance > 0) {
+          const dx = x - mouse.x
+          const dy = y - mouse.y
+          const distance = Math.hypot(dx, dy)
+
+          if (distance > 0 && distance < repelDistance) {
+            const force = (repelDistance - distance) / repelDistance
+            x += (dx / distance) * force * 2.2
+            y += (dy / distance) * force * 2.2
+          }
         }
 
-        // Bounce walls
-        if (x > W / 2 || x < -W / 2) velocities[i].x *= -1
-        if (y > H / 2 || y < -H / 2) velocities[i].y *= -1
+        if (x > bounds.width / 2) {
+          x = bounds.width / 2
+          velocity.x *= -1
+        } else if (x < -bounds.width / 2) {
+          x = -bounds.width / 2
+          velocity.x *= -1
+        }
 
-        pos.setXYZ(i, x, y, 0)
+        if (y > bounds.height / 2) {
+          y = bounds.height / 2
+          velocity.y *= -1
+        } else if (y < -bounds.height / 2) {
+          y = -bounds.height / 2
+          velocity.y *= -1
+        }
+
+        pos.setXYZ(i, x, y, z)
       }
       pos.needsUpdate = true
 
-      // Update lines
-      let lineIdx = 0
-      const lp = lineGeo.attributes.position as THREE.BufferAttribute
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        for (let j = i + 1; j < PARTICLE_COUNT; j++) {
-          const ax = pos.getX(i), ay = pos.getY(i)
-          const bx = pos.getX(j), by = pos.getY(j)
-          const d = Math.hypot(ax - bx, ay - by)
+      let lineIndex = 0
+      const linePos = lineGeo.attributes.position as THREE.BufferAttribute
 
-          if (d < LINK_DISTANCE && lineIdx < linePositions.length / 6) {
-            lp.setXYZ(lineIdx * 2,     ax, ay, 0)
-            lp.setXYZ(lineIdx * 2 + 1, bx, by, 0)
-            lineIdx++
+      for (let i = 0; i < particleCount; i++) {
+        for (let j = i + 1; j < particleCount; j++) {
+          const ax = pos.getX(i)
+          const ay = pos.getY(i)
+          const az = pos.getZ(i)
+          const bx = pos.getX(j)
+          const by = pos.getY(j)
+          const bz = pos.getZ(j)
+          const distance = Math.hypot(ax - bx, ay - by)
+
+          if (distance < linkDistance && lineIndex < linePositions.length / 6) {
+            linePos.setXYZ(lineIndex * 2, ax, ay, az)
+            linePos.setXYZ(lineIndex * 2 + 1, bx, by, bz)
+            lineIndex++
           }
         }
       }
-      // Clear remaining line slots
-      for (let k = lineIdx * 2; k < linePositions.length / 3; k++) {
-        lp.setXYZ(k, 0, 0, 0)
-      }
-      lp.needsUpdate = true
-      lineGeo.setDrawRange(0, lineIdx * 2)
+
+      lineGeo.setDrawRange(0, lineIndex * 2)
+      linePos.needsUpdate = true
+      points.rotation.z = Math.sin(elapsed * 0.12) * 0.015
+      lines.rotation.z = points.rotation.z
 
       renderer.render(scene, camera)
     }
 
-    animate()
-
-    // Resize
-    const onResize = () => {
-      const w = mount.clientWidth
-      const h = mount.clientHeight
-      camera.aspect = w / h
-      camera.updateProjectionMatrix()
-      renderer.setSize(w, h)
-    }
-    window.addEventListener('resize', onResize)
+    animationId = requestAnimationFrame(animate)
 
     return () => {
-      cancelAnimationFrame(animId)
+      cancelAnimationFrame(animationId)
       window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseleave', onLeave)
       window.removeEventListener('resize', onResize)
       renderer.dispose()
-      geo.dispose()
-      mat.dispose()
+      particleGeo.dispose()
+      particleMat.dispose()
       lineGeo.dispose()
       lineMat.dispose()
       if (mount.contains(renderer.domElement)) {
@@ -169,7 +207,7 @@ export default function HeroCanvas() {
   return (
     <div
       ref={mountRef}
-      className="absolute inset-0 pointer-events-none"
+      className="absolute inset-0 z-0 pointer-events-none"
       aria-hidden="true"
     />
   )
