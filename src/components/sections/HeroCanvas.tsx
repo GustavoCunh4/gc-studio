@@ -6,7 +6,6 @@ import * as THREE from 'three'
 const PARTICLE_COUNT = 90
 const LINK_DISTANCE = 120
 const ACCENT_COLOR = new THREE.Color('#ff6600')
-const DIM_COLOR = new THREE.Color('#2a1a0a')
 
 export default function HeroCanvas() {
   const mountRef = useRef<HTMLDivElement>(null)

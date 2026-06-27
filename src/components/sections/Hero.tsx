@@ -1,134 +1,115 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useRef } from 'react'
+import { ArrowRight, Sparkles } from 'lucide-react'
 
 const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false })
 
 export default function Hero() {
-  const headlineRef = useRef<HTMLHeadingElement>(null)
-  const subRef = useRef<HTMLParagraphElement>(null)
-  const ctaRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      ;[headlineRef, subRef, ctaRef].forEach((r) => {
-        if (r.current) { r.current.style.opacity = '1'; r.current.style.transform = 'none' }
-      })
-      return
-    }
-
-    const els = [headlineRef.current, subRef.current, ctaRef.current]
-    els.forEach((el, i) => {
-      if (!el) return
-      setTimeout(() => {
-        el.style.transition = 'opacity 0.8s ease, transform 0.8s ease'
-        el.style.opacity = '1'
-        el.style.transform = 'translateY(0)'
-      }, 200 + i * 180)
-    })
-  }, [])
+  const scrollTo = (selector: string) => {
+    document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
     <section
       id="hero"
-      className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-6"
+      className="ambient-band relative flex min-h-[92svh] items-center overflow-hidden px-0 pb-16 pt-28 sm:pt-32"
       style={{ background: 'var(--bg-void)' }}
     >
       <HeroCanvas />
 
-      {/* Glow central */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-32"
+        style={{ background: 'linear-gradient(to bottom, transparent, var(--bg-void))' }}
         aria-hidden="true"
-        style={{
-          background:
-            'radial-gradient(ellipse 50% 35% at 50% 65%, rgba(255,102,0,0.08) 0%, transparent 70%)',
-        }}
       />
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center text-center gap-8 max-w-3xl mx-auto">
-
-        {/* Headline */}
-        <h1
-          ref={headlineRef}
-          className="font-display font-500 tracking-tight"
-          style={{
-            fontSize: 'clamp(2.5rem, 6vw, 4.75rem)',
-            lineHeight: 1.05,
-            color: 'var(--text-primary)',
-            opacity: 0,
-            transform: 'translateY(20px)',
-          }}
-        >
-          Seu negócio no piloto automático,{' '}
-          <span style={{ color: 'var(--accent)' }}>do jeito certo.</span>
-        </h1>
-
-        {/* Subtitle */}
-        <p
-          ref={subRef}
-          className="text-lg md:text-xl leading-relaxed max-w-2xl"
-          style={{
-            color: 'var(--text-secondary)',
-            opacity: 0,
-            transform: 'translateY(20px)',
-          }}
-        >
-          Desenvolvemos sistemas, automações e inteligência artificial para empresas que querem crescer
-          sem depender de processos manuais, planilhas e retrabalho.
-        </p>
-
-        {/* CTAs */}
-        <div
-          ref={ctaRef}
-          className="flex flex-col sm:flex-row items-center gap-3"
-          style={{ opacity: 0, transform: 'translateY(20px)' }}
-        >
-          <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault()
-              document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
+      <div className="container-shell relative z-10">
+        <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+          <div
+            className="mb-7 inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-mono"
+            style={{
+              borderColor: 'var(--line-accent)',
+              background: 'rgba(255,102,0,0.06)',
+              color: 'var(--accent)',
+              animation: 'hero-lift 700ms var(--ease-out) both',
             }}
-            className="px-8 py-3.5 rounded-full font-display font-medium text-sm transition-all duration-200 hover:opacity-90 active:scale-[0.97]"
-            style={{ background: 'var(--accent)', color: 'var(--text-inverse)' }}
           >
-            Diagnóstico gratuito
-          </a>
-          <a
-            href="#cases"
-            onClick={(e) => {
-              e.preventDefault()
-              document.querySelector('#cases')?.scrollIntoView({ behavior: 'smooth' })
+            <Sparkles size={14} aria-hidden="true" />
+            Automação, sistemas e IA aplicada
+          </div>
+
+          <h1
+            className="font-display font-500 tracking-tight"
+            style={{
+              fontSize: 'clamp(2.65rem, 7vw, 5.6rem)',
+              lineHeight: 0.98,
+              color: 'var(--text-primary)',
+              animation: 'hero-lift 800ms var(--ease-out) 80ms both',
             }}
-            className="px-8 py-3.5 rounded-full font-display text-sm border transition-all duration-200 hover:border-accent hover:text-accent"
-            style={{ color: 'var(--text-secondary)', border: '1px solid var(--line-bright)' }}
           >
-            Ver projetos →
-          </a>
+            Seu negócio no piloto automático,{' '}
+            <span style={{ color: 'var(--accent)' }}>do jeito certo.</span>
+          </h1>
+
+          <p
+            className="mt-7 max-w-2xl text-base leading-relaxed sm:text-lg md:text-xl"
+            style={{
+              color: '#c8c2bd',
+              animation: 'hero-lift 800ms var(--ease-out) 150ms both',
+            }}
+          >
+            Desenvolvemos sistemas, automações e inteligência artificial para empresas que querem crescer
+            sem depender de processos manuais, planilhas e retrabalho.
+          </p>
+
+          <div
+            className="relative z-10 mt-9 flex w-full max-w-md flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center"
+            style={{ animation: 'hero-lift 800ms var(--ease-out) 220ms both' }}
+          >
+            <a
+              href="#contact"
+              onClick={(event) => {
+                event.preventDefault()
+                scrollTo('#contact')
+              }}
+              className="btn-primary"
+            >
+              Diagnóstico gratuito
+              <ArrowRight size={16} aria-hidden="true" />
+            </a>
+            <a
+              href="#cases"
+              onClick={(event) => {
+                event.preventDefault()
+                scrollTo('#cases')
+              }}
+              className="btn-secondary"
+            >
+              Ver projetos
+            </a>
+          </div>
+
+          <div className="relative z-0 mt-14 grid w-full max-w-2xl grid-cols-1 gap-2 text-left sm:grid-cols-3">
+            {['Sem compromisso', 'Sem jargão técnico', 'Plano claro de ação'].map((item) => (
+              <div
+                key={item}
+                className="rounded-full border px-4 py-2 text-center text-xs font-mono"
+                style={{ borderColor: 'var(--line)', color: 'var(--text-dim)', background: 'rgba(255,255,255,0.02)' }}
+              >
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
-
-        {/* Trust micro-line */}
-        <p
-          className="text-xs font-mono"
-          style={{ color: 'var(--text-dim)', opacity: 0, animation: 'none' }}
-          ref={(el) => {
-            if (el) setTimeout(() => { el.style.transition = 'opacity 1s ease'; el.style.opacity = '1' }, 1200)
-          }}
-        >
-          Sem compromisso. Sem jargão técnico. Só uma conversa.
-        </p>
       </div>
 
-      {/* Scroll indicator */}
       <div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 sm:flex"
         aria-hidden="true"
       >
         <div
-          className="w-px h-10"
+          className="h-11 w-px"
           style={{
             background: 'linear-gradient(to bottom, var(--accent), transparent)',
             animation: 'pulse 2s ease-in-out infinite',

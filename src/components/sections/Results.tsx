@@ -1,3 +1,4 @@
+import { ArrowRight, Quote } from 'lucide-react'
 import Counter from '@/components/ui/Counter'
 
 const STATS = [
@@ -11,69 +12,66 @@ const TESTIMONIAL = {
   quote:
     'O sistema foi entregue em 3 semanas e funciona exatamente como precisávamos. Não perdemos mais tempo com planilha e hoje sabemos em tempo real como está o caixa.',
   name: 'Carlos M.',
-  role: 'Proprietário — Alpha Clean, Salvador, BA',
+  role: 'Proprietário - Alpha Clean, Salvador, BA',
 }
 
 export default function Results() {
   return (
     <section
       id="results"
-      className="py-28 md:py-40"
+      className="section-pad"
       style={{ background: 'var(--bg-void)', borderTop: '1px solid var(--line)' }}
     >
-      <div className="max-w-6xl mx-auto px-6 md:px-8">
-        {/* Eyebrow */}
-        <p
-          className="font-mono text-xs tracking-[0.2em] uppercase mb-20"
-          style={{ color: 'var(--accent)' }}
-        >
-          Resultados
-        </p>
+      <div className="container-shell">
+        <div className="reveal mb-12 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker mb-4">Resultados</p>
+            <h2 className="section-title max-w-2xl">Impacto que aparece na rotina.</h2>
+          </div>
+          <p className="max-w-sm text-sm leading-relaxed" style={{ color: 'var(--text-dim)' }}>
+            Métricas simples, acompanhadas desde o diagnóstico até a evolução do sistema.
+          </p>
+        </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-8 pb-20 mb-20" style={{ borderBottom: '1px solid var(--line)' }}>
-          {STATS.map((s) => (
-            <Counter key={s.label} value={s.value} suffix={s.suffix} label={s.label} />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {STATS.map((stat, index) => (
+            <div
+              key={stat.label}
+              className="surface-card reveal-scale rounded-2xl p-6"
+              style={{ transitionDelay: `${index * 60}ms` }}
+            >
+              <Counter value={stat.value} suffix={stat.suffix} label={stat.label} />
+            </div>
           ))}
         </div>
 
-        {/* Single testimonial */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <blockquote className="flex flex-col gap-6">
-            <div className="text-4xl" style={{ color: 'var(--accent)', lineHeight: 1 }} aria-hidden="true">
-              "
-            </div>
+        <div className="mt-14 grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(320px,0.65fr)] lg:gap-16">
+          <blockquote className="surface-card reveal rounded-2xl p-7 md:p-9">
+            <Quote size={34} aria-hidden="true" style={{ color: 'var(--accent)' }} />
             <p
-              className="font-display font-400 leading-relaxed"
-              style={{
-                fontSize: 'clamp(1.125rem, 2vw, 1.5rem)',
-                color: 'var(--text-primary)',
-              }}
+              className="mt-6 font-display font-400 leading-relaxed"
+              style={{ fontSize: 'clamp(1.125rem, 2vw, 1.55rem)', color: 'var(--text-primary)' }}
             >
               {TESTIMONIAL.quote}
             </p>
-            <footer>
-              <cite className="not-italic font-display font-500 text-sm" style={{ color: 'var(--text-primary)' }}>
+            <footer className="mt-7">
+              <cite className="not-italic font-display text-sm font-500" style={{ color: 'var(--text-primary)' }}>
                 {TESTIMONIAL.name}
               </cite>
-              <p className="text-xs font-mono mt-1" style={{ color: 'var(--text-dim)' }}>
+              <p className="mt-1 font-mono text-xs" style={{ color: 'var(--text-dim)' }}>
                 {TESTIMONIAL.role}
               </p>
             </footer>
           </blockquote>
 
-          {/* CTA */}
-          <div className="flex flex-col gap-5">
+          <div className="reveal flex flex-col gap-5" style={{ transitionDelay: '120ms' }}>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              Esses resultados vêm de um processo que começa entendendo a operação do cliente — não o código.
+              Esses resultados vêm de um processo que começa entendendo a operação do cliente - não o código.
               Cada projeto tem como meta um resultado de negócio mensurável.
             </p>
-            <a
-              href="#contact"
-              className="self-start px-7 py-3.5 rounded-full font-display font-medium text-sm border transition-all duration-200 hover:border-accent hover:text-accent active:scale-[0.97]"
-              style={{ border: '1px solid var(--line-bright)', color: 'var(--text-primary)' }}
-            >
-              Iniciar diagnóstico →
+            <a href="#contact" className="btn-secondary self-start">
+              Iniciar diagnóstico
+              <ArrowRight size={16} aria-hidden="true" />
             </a>
           </div>
         </div>

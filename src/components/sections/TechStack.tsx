@@ -33,7 +33,7 @@ export default function TechStack() {
     >
       <div className="mb-12 px-6">
         <p className="font-mono text-xs tracking-widest mb-2" style={{ color: 'var(--accent)' }}>
-          // Stack
+          Stack
         </p>
         <h2
           className="font-display text-2xl md:text-3xl font-500 tracking-tight"

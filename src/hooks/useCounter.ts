@@ -13,8 +13,8 @@ export function useCounter(
   useEffect(() => {
     if (!start) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setCount(target)
-      return
+      rafRef.current = requestAnimationFrame(() => setCount(target))
+      return () => cancelAnimationFrame(rafRef.current)
     }
 
     const startTime = performance.now()
