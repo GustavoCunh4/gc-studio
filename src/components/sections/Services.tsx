@@ -1,36 +1,44 @@
-import { ArrowRight, Bot, Gauge, Map, Workflow } from 'lucide-react'
+import { ArrowRight, Bot, CheckCircle2, Gauge, Map, Workflow } from 'lucide-react'
 
 const SERVICES = [
   {
     number: '01',
-    title: 'Sistemas sob medida',
+    title: 'Organizar sua operação em um sistema',
+    plainTitle: 'Quando planilha, papel e WhatsApp já não dão conta.',
     description:
-      'Construímos exatamente o que o seu negócio precisa - sem sobras, sem adaptações. Painéis de gestão, portais de clientes, sistemas de pedidos, controle de operação. Se você consegue descrever o problema, a gente constrói a solução.',
-    highlight: 'Para quem tem um processo que não cabe em nenhum software do mercado.',
+      'Criamos um sistema próprio para centralizar pedidos, clientes, agenda, estoque, financeiro ou qualquer processo importante da sua empresa.',
+    deliverables: ['Painel para acompanhar a operação', 'Cadastro e histórico de clientes', 'Relatórios claros para decisão'],
+    result: 'Você para de procurar informação em vários lugares e passa a ter controle em uma tela.',
     icon: Gauge,
   },
   {
     number: '02',
-    title: 'Automação de processos',
+    title: 'Automatizar tarefas repetitivas',
+    plainTitle: 'Quando sua equipe perde tempo fazendo sempre a mesma coisa.',
     description:
-      'Mapeamos tudo que sua equipe faz de forma repetitiva e automatizamos. Relatórios que montam sozinhos, notificações automáticas, integração entre sistemas, fluxos de aprovação. Sua equipe para de perder tempo e começa a focar no que importa.',
-    highlight: 'Para quem paga funcionários para fazer trabalho que um computador poderia fazer.',
+      'Automatizamos relatórios, avisos, cobranças, atualizações de planilha, envio de mensagens e integrações entre ferramentas.',
+    deliverables: ['Fluxos automáticos funcionando sozinhos', 'Integração entre sistemas', 'Alertas e relatórios programados'],
+    result: 'Você economiza horas por semana e reduz erros causados por trabalho manual.',
     icon: Workflow,
   },
   {
     number: '03',
-    title: 'Inteligência Artificial aplicada',
+    title: 'Usar IA de forma prática',
+    plainTitle: 'Quando dá para atender, analisar ou decidir mais rápido.',
     description:
-      'IA que resolve problemas reais do seu negócio - atendimento automático com contexto, análise de documentos e contratos, previsão de demanda, extração de dados de PDFs e imagens. Sem hype, com resultado mensurável.',
-    highlight: 'Para quem quer usar IA de verdade, não só falar que usa.',
+      'Aplicamos IA em tarefas úteis: atendimento com contexto, leitura de documentos, extração de dados, triagem de mensagens e apoio à decisão.',
+    deliverables: ['Assistentes treinados para sua rotina', 'Leitura de PDFs, imagens e contratos', 'Respostas e análises com contexto'],
+    result: 'Você usa IA para resolver trabalho real, não só para parecer moderno.',
     icon: Bot,
   },
   {
     number: '04',
-    title: 'Consultoria e diagnóstico',
+    title: 'Diagnosticar o melhor caminho',
+    plainTitle: 'Quando você sabe que precisa melhorar, mas não sabe por onde começar.',
     description:
-      'Não sabe por onde começar ou precisa de direção antes de investir? Fazemos um mapeamento completo da sua operação, identificamos os gargalos e entregamos um plano claro de como a tecnologia pode te ajudar - sem compromisso de contratar.',
-    highlight: 'Para quem quer entender o problema antes de gastar dinheiro na solução.',
+      'Mapeamos sua operação, identificamos gargalos e entregamos um plano simples do que deve ser automatizado, criado ou melhorado primeiro.',
+    deliverables: ['Mapa dos processos atuais', 'Prioridades por impacto e urgência', 'Plano de ação sem jargão técnico'],
+    result: 'Você entende onde investir antes de gastar dinheiro construindo qualquer coisa.',
     icon: Map,
   },
 ]
@@ -46,13 +54,14 @@ export default function Services() {
         <div className="reveal mb-14 grid gap-6 md:mb-16 lg:grid-cols-[minmax(0,0.85fr)_minmax(260px,0.45fr)] lg:items-end">
           <div className="max-w-2xl">
             <p className="section-kicker mb-4">Serviços</p>
-            <h2 className="section-title mb-5">O que fazemos - e o que você ganha com isso.</h2>
+            <h2 className="section-title mb-5">O que fazemos, em linguagem simples.</h2>
             <p className="section-copy">
-              Cada serviço é entregue com foco em resultado de negócio, não em tecnologia pela tecnologia.
+              A entrega pode ser sistema, automação ou IA. O objetivo é sempre o mesmo:
+              economizar tempo, reduzir erro e dar mais controle para sua empresa.
             </p>
           </div>
           <p className="hidden text-sm leading-relaxed lg:block" style={{ color: 'var(--text-dim)' }}>
-            Diagnóstico primeiro, código depois. O objetivo é reduzir desperdício operacional e criar sistemas que a equipe realmente usa.
+            Primeiro entendemos a rotina. Depois decidimos o que construir. Você não precisa saber tecnologia para começar.
           </p>
         </div>
 
@@ -63,7 +72,7 @@ export default function Services() {
             return (
               <article
                 key={service.number}
-                className="surface-card interactive-lift reveal-scale group flex min-h-[390px] flex-col overflow-hidden rounded-2xl"
+                className="surface-card interactive-lift reveal-scale group flex min-h-[430px] flex-col overflow-hidden rounded-2xl"
                 style={{ transitionDelay: `${index * 75}ms`, background: 'var(--bg-void)' }}
               >
                 <div className="flex flex-1 flex-col gap-6 p-7 md:p-8">
@@ -93,13 +102,28 @@ export default function Services() {
                   <div className="flex flex-col gap-3">
                     <h3
                       className="font-display font-500 leading-snug"
-                      style={{ fontSize: 'clamp(1.15rem, 1.8vw, 1.45rem)', color: 'var(--text-primary)' }}
+                      style={{ fontSize: 'clamp(1.18rem, 1.8vw, 1.45rem)', color: 'var(--text-primary)' }}
                     >
                       {service.title}
                     </h3>
+                    <p className="text-sm font-500 leading-relaxed" style={{ color: 'var(--accent)' }}>
+                      {service.plainTitle}
+                    </p>
                     <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)', lineHeight: 1.72 }}>
                       {service.description}
                     </p>
+                  </div>
+
+                  <div className="grid gap-2">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.18em]" style={{ color: 'var(--text-dim)' }}>
+                      Você recebe
+                    </p>
+                    {service.deliverables.map((item) => (
+                      <div key={item} className="flex gap-2 text-sm leading-snug" style={{ color: 'var(--text-secondary)' }}>
+                        <CheckCircle2 size={15} className="mt-0.5 shrink-0" aria-hidden="true" style={{ color: 'var(--accent)' }} />
+                        <span>{item}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -107,8 +131,8 @@ export default function Services() {
                   className="mt-auto px-7 py-5 md:px-8"
                   style={{ background: 'rgba(255,102,0,0.045)', borderTop: '1px solid var(--line-accent)' }}
                 >
-                  <p className="text-xs leading-relaxed font-mono" style={{ color: 'var(--accent)', opacity: 0.9 }}>
-                    {service.highlight}
+                  <p className="text-xs leading-relaxed font-mono" style={{ color: 'var(--accent)', opacity: 0.95 }}>
+                    Resultado: {service.result}
                   </p>
                 </div>
               </article>
@@ -118,7 +142,7 @@ export default function Services() {
 
         <div className="reveal mt-12 flex flex-col items-center gap-4 text-center md:mt-14">
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Não sabe qual serviço se encaixa no seu caso? A conversa é gratuita.
+            Não sabe qual caminho faz sentido para sua empresa? A primeira conversa é gratuita.
           </p>
           <a href="#contact" className="btn-primary">
             Diagnóstico gratuito

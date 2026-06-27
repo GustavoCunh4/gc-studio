@@ -1,20 +1,22 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { type MouseEvent, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import NavLine from '@/components/ui/NavLine'
 
 const NAV_LINKS = [
-  { label: 'Serviços', href: '#services' },
-  { label: 'Projetos', href: '#cases' },
-  { label: 'Sobre', href: '#about' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'Contato', href: '#contact' },
+  { label: 'Serviços', href: '/#services' },
+  { label: 'Projetos', href: '/projetos' },
+  { label: 'FAQ', href: '/#faq' },
+  { label: 'Contato', href: '/#contact' },
 ]
 
 export default function Header() {
   const headerRef = useRef<HTMLElement>(null)
+  const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -40,8 +42,19 @@ export default function Header() {
   }, [menuOpen])
 
   const scrollTo = (href: string) => {
+    const selector = href.startsWith('/#') ? href.slice(1) : href
     setMenuOpen(false)
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+    document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname === '/' && href.startsWith('/#')) {
+      event.preventDefault()
+      scrollTo(href)
+      return
+    }
+
+    setMenuOpen(false)
   }
 
   return (
@@ -56,12 +69,14 @@ export default function Header() {
       }}
     >
       <div className="container-shell flex h-16 items-center justify-between">
-        <a
-          href="#"
+        <Link
+          href="/"
           onClick={(event) => {
-            event.preventDefault()
-            window.scrollTo({ top: 0, behavior: 'smooth' })
             setMenuOpen(false)
+            if (pathname === '/') {
+              event.preventDefault()
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }
           }}
           className="group flex items-center gap-2.5"
           aria-label="GC Studio - início"
@@ -77,37 +92,31 @@ export default function Header() {
           <span className="font-display text-base font-500 tracking-tight" style={{ color: 'var(--text-primary)' }}>
             GC Studio
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Navegação principal">
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
-              onClick={(event) => {
-                event.preventDefault()
-                scrollTo(link.href)
-              }}
+              onClick={(event) => handleNavClick(event, link.href)}
               className="group relative pb-1 text-sm transition-colors duration-200 hover:text-text-primary"
               style={{ color: 'var(--text-dim)' }}
             >
               {link.label}
               <NavLine />
-            </a>
+            </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
-            href="#contact"
-            onClick={(event) => {
-              event.preventDefault()
-              scrollTo('#contact')
-            }}
+          <Link
+            href="/#contact"
+            onClick={(event) => handleNavClick(event, '/#contact')}
             className="btn-primary hidden min-h-0 px-5 py-2.5 md:inline-flex"
           >
             Diagnóstico gratuito
-          </a>
+          </Link>
 
           <button
             type="button"
@@ -135,29 +144,23 @@ export default function Header() {
       >
         <nav className="container-shell flex flex-col gap-2 py-5" aria-label="Navegação mobile">
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
-              onClick={(event) => {
-                event.preventDefault()
-                scrollTo(link.href)
-              }}
+              onClick={(event) => handleNavClick(event, link.href)}
               className="rounded-xl px-2 py-3 font-display text-base transition-colors duration-200 hover:text-accent"
               style={{ color: 'var(--text-secondary)' }}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
-          <a
-            href="#contact"
-            onClick={(event) => {
-              event.preventDefault()
-              scrollTo('#contact')
-            }}
+          <Link
+            href="/#contact"
+            onClick={(event) => handleNavClick(event, '/#contact')}
             className="btn-primary mt-3"
           >
             Diagnóstico gratuito
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
 import { buildDirectWhatsAppLink } from '@/lib/whatsapp'
 
@@ -26,7 +27,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              Sistemas, automação e inteligência artificial para empresas que querem crescer com eficiência.
+              Sistemas, automações e IA para empresas que querem economizar tempo, reduzir erros e ter mais controle da operação.
             </p>
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
@@ -43,16 +44,15 @@ export default function Footer() {
               </p>
               <ul className="flex flex-col gap-3">
                 {[
-                  ['Serviços', '#services'],
-                  ['Projetos', '#cases'],
-                  ['Sobre', '#about'],
-                  ['FAQ', '#faq'],
-                  ['Contato', '#contact'],
+                  ['Serviços', '/#services'],
+                  ['Projetos', '/projetos'],
+                  ['FAQ', '/#faq'],
+                  ['Contato', '/#contact'],
                 ].map(([label, href]) => (
                   <li key={label}>
-                    <a href={href} className="text-sm transition-colors duration-200 hover:text-accent" style={{ color: 'var(--text-secondary)' }}>
+                    <Link href={href} className="text-sm transition-colors duration-200 hover:text-accent" style={{ color: 'var(--text-secondary)' }}>
                       {label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

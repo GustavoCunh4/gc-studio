@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -116,7 +117,7 @@ export default function Hero() {
             }}
           >
             <Sparkles size={14} aria-hidden="true" />
-            Automação, sistemas e IA aplicada
+            Sistemas, automações e IA para empresas
           </div>
 
           <TypewriterHeadline />
@@ -128,8 +129,8 @@ export default function Hero() {
               animation: 'hero-lift 800ms var(--ease-out) 150ms both',
             }}
           >
-            Desenvolvemos sistemas, automações e inteligência artificial para empresas que querem crescer
-            sem depender de processos manuais, planilhas e retrabalho.
+            Criamos tecnologia sob medida para sua empresa parar de depender de planilhas,
+            tarefas manuais e retrabalho. Você ganha tempo, controle e uma operação mais previsível.
           </p>
 
           <div
@@ -147,16 +148,9 @@ export default function Hero() {
               Diagnóstico gratuito
               <ArrowRight size={16} aria-hidden="true" />
             </a>
-            <a
-              href="#cases"
-              onClick={(event) => {
-                event.preventDefault()
-                scrollTo('#cases')
-              }}
-              className="btn-secondary"
-            >
+            <Link href="/projetos" className="btn-secondary">
               Ver projetos
-            </a>
+            </Link>
           </div>
 
           <div className="relative z-0 mt-14 grid w-full max-w-2xl grid-cols-1 gap-2 text-left sm:grid-cols-3">
