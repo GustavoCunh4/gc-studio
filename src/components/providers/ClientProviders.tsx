@@ -10,8 +10,16 @@ const LenisProvider = dynamic(
 
 function RevealObserver() {
   useEffect(() => {
+    const targets = document.querySelectorAll('.reveal, .reveal-scale, section[id]:not(#hero)')
+
+    targets.forEach((el) => {
+      if (el instanceof HTMLElement && el.matches('section[id]:not(#hero)')) {
+        el.classList.add('scroll-section')
+      }
+    })
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.querySelectorAll('.reveal, .reveal-scale').forEach((el) => el.classList.add('is-visible'))
+      targets.forEach((el) => el.classList.add('is-visible'))
       return
     }
 
@@ -28,8 +36,7 @@ function RevealObserver() {
       { threshold: 0.12, rootMargin: '-8% 0px -8% 0px' }
     )
 
-    const elements = document.querySelectorAll('.reveal, .reveal-scale')
-    elements.forEach((el) => observer.observe(el))
+    targets.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
 

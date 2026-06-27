@@ -10,39 +10,11 @@ const HEADLINE_PREFIX = 'Seu negócio no piloto automático, '
 const HEADLINE_ACCENT = 'do jeito certo.'
 const HEADLINE = `${HEADLINE_PREFIX}${HEADLINE_ACCENT}`
 
-function TypewriterText({
-  text,
-  offset,
-  typedCount,
-  color,
-}: {
-  text: string
-  offset: number
-  typedCount: number
-  color?: string
-}) {
-  return (
-    <>
-      {Array.from(text).map((char, index) => {
-        const visible = typedCount > offset + index
-
-        return (
-          <span
-            key={`${char}-${index}`}
-            className="typewriter-char"
-            style={{ color, opacity: visible ? 1 : 0 }}
-            aria-hidden="true"
-          >
-            {char}
-          </span>
-        )
-      })}
-    </>
-  )
-}
-
 function TypewriterHeadline() {
   const [typedCount, setTypedCount] = useState(0)
+  const typedText = HEADLINE.slice(0, typedCount)
+  const typedPrefix = typedText.slice(0, Math.min(typedText.length, HEADLINE_PREFIX.length))
+  const typedAccent = typedText.slice(HEADLINE_PREFIX.length)
 
   useEffect(() => {
     const total = HEADLINE.length
@@ -73,7 +45,7 @@ function TypewriterHeadline() {
 
   return (
     <h1
-      className="font-display font-500 tracking-tight"
+      className="typewriter-headline font-display font-500 tracking-tight"
       aria-label={HEADLINE}
       style={{
         fontSize: 'clamp(2.65rem, 7vw, 5.6rem)',
@@ -81,18 +53,18 @@ function TypewriterHeadline() {
         color: 'var(--text-primary)',
       }}
     >
-      <TypewriterText text={HEADLINE_PREFIX} offset={0} typedCount={typedCount} />
-      <TypewriterText
-        text={HEADLINE_ACCENT}
-        offset={HEADLINE_PREFIX.length}
-        typedCount={typedCount}
-        color="var(--accent)"
-      />
-      <span
-        className="typewriter-caret"
-        aria-hidden="true"
-        style={{ opacity: typedCount < HEADLINE.length ? 1 : 0 }}
-      />
+      <span className="typewriter-measure" aria-hidden="true">
+        {HEADLINE_PREFIX}
+        <span style={{ color: 'var(--accent)' }}>{HEADLINE_ACCENT}</span>
+      </span>
+      <span className="typewriter-live" aria-hidden="true">
+        {typedPrefix}
+        {typedAccent && <span style={{ color: 'var(--accent)' }}>{typedAccent}</span>}
+        <span
+          className="typewriter-caret"
+          style={{ opacity: typedCount < HEADLINE.length ? 1 : 0 }}
+        />
+      </span>
     </h1>
   )
 }

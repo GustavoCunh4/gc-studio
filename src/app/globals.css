@@ -156,6 +156,23 @@ code, pre, .mono {
   filter: blur(0);
 }
 
+.scroll-section {
+  opacity: 0.42;
+  transform: translateY(38px) scale(0.992);
+  filter: blur(3px);
+  transition:
+    opacity 0.85s var(--ease-out),
+    transform 0.85s var(--ease-out),
+    filter 0.85s var(--ease-out);
+  will-change: opacity, transform, filter;
+}
+
+.scroll-section.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
 /* Delay variants */
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
@@ -167,18 +184,27 @@ code, pre, .mono {
   to { transform: translateY(0); }
 }
 
-.typewriter-word {
-  display: inline-block;
-  white-space: nowrap;
+.typewriter-headline {
+  display: grid;
 }
 
-.typewriter-char {
-  transition: opacity 0.08s linear;
+.typewriter-measure,
+.typewriter-live {
+  grid-area: 1 / 1;
+}
+
+.typewriter-measure {
+  visibility: hidden;
+}
+
+.typewriter-live {
+  align-self: start;
+  justify-self: stretch;
 }
 
 .typewriter-caret {
   display: inline-block;
-  width: 0.055em;
+  width: 0.06em;
   height: 0.82em;
   margin-left: 0.08em;
   transform: translateY(0.08em);

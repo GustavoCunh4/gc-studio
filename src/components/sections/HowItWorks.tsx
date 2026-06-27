@@ -30,6 +30,29 @@ export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0)
   const [isPinned, setIsPinned] = useState(false)
 
+  const scrollToStep = (index: number, button?: HTMLButtonElement) => {
+    setActiveStep(index)
+
+    const section = sectionRef.current
+    if (!section) return
+
+    const shouldPin = window.matchMedia('(min-width: 1024px)').matches
+
+    if (!shouldPin) {
+      button?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+
+    const scrollableDistance = Math.max(section.offsetHeight - window.innerHeight, 0)
+    const progress = STEPS.length > 1 ? index / (STEPS.length - 1) : 0
+    const targetTop = section.offsetTop + scrollableDistance * progress
+
+    window.scrollTo({
+      top: targetTop,
+      behavior: 'smooth',
+    })
+  }
+
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
@@ -94,7 +117,7 @@ export default function HowItWorks() {
                       background: selected ? 'var(--bg-elevated)' : 'transparent',
                       borderColor: selected ? 'var(--line-accent)' : 'transparent',
                     }}
-                    onClick={() => setActiveStep(index)}
+                    onClick={(event) => scrollToStep(index, event.currentTarget)}
                   >
                     <span className="flex items-center gap-5">
                       <span
