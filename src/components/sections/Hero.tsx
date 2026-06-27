@@ -10,6 +10,15 @@ const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false })
 const HEADLINE_PREFIX = 'Seu negócio no piloto automático, '
 const HEADLINE_ACCENT = 'do jeito certo.'
 const HEADLINE = `${HEADLINE_PREFIX}${HEADLINE_ACCENT}`
+const INTRO_STORAGE_KEY = 'gc-studio:intro-seen'
+
+function hasSeenIntro() {
+  try {
+    return window.localStorage.getItem(INTRO_STORAGE_KEY) === 'true'
+  } catch {
+    return false
+  }
+}
 
 function TypewriterHeadline() {
   const [typedCount, setTypedCount] = useState(0)
@@ -46,7 +55,7 @@ function TypewriterHeadline() {
       }, 260)
     }
 
-    if (document.documentElement.dataset.introComplete === 'true' || !document.querySelector('.intro-loader')) {
+    if (document.documentElement.dataset.introComplete === 'true' || hasSeenIntro()) {
       startTyping()
     } else {
       window.addEventListener('gc:intro-complete', startTyping, { once: true })

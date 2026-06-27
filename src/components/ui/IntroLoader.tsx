@@ -5,6 +5,24 @@ import * as THREE from 'three'
 
 type IntroPhase = 'loading' | 'opening' | 'done'
 
+const INTRO_STORAGE_KEY = 'gc-studio:intro-seen'
+
+function hasSeenIntro() {
+  try {
+    return window.localStorage.getItem(INTRO_STORAGE_KEY) === 'true'
+  } catch {
+    return false
+  }
+}
+
+function saveIntroSeen() {
+  try {
+    window.localStorage.setItem(INTRO_STORAGE_KEY, 'true')
+  } catch {
+    // Storage can be unavailable in private/restricted browser contexts.
+  }
+}
+
 function LogoScene({ active }: { active: boolean }) {
   const mountRef = useRef<HTMLDivElement>(null)
 
@@ -254,6 +272,17 @@ export default function IntroLoader() {
     let frame = 0
     let startedAt = 0
 
+    const markComplete = () => {
+      root.dataset.introComplete = 'true'
+      window.dispatchEvent(new Event('gc:intro-complete'))
+    }
+
+    if (hasSeenIntro()) {
+      markComplete()
+      frame = window.requestAnimationFrame(() => setVisible(false))
+      return () => window.cancelAnimationFrame(frame)
+    }
+
     root.classList.add('intro-scroll-lock')
 
     const schedule = (callback: () => void, delay: number) => {
@@ -266,8 +295,8 @@ export default function IntroLoader() {
       schedule(() => setPhase('opening'), prefersReducedMotion ? 80 : 180)
       schedule(() => setPhase('done'), prefersReducedMotion ? 360 : 1250)
       schedule(() => {
-        root.dataset.introComplete = 'true'
-        window.dispatchEvent(new Event('gc:intro-complete'))
+        saveIntroSeen()
+        markComplete()
         setVisible(false)
       }, prefersReducedMotion ? 520 : 1640)
     }
