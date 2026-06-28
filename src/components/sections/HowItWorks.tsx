@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { gsap, ScrollTrigger, registerGSAP } from '@/lib/gsap'
+import { getLenis } from '@/lib/lenis'
 
 const STEPS = [
   {
@@ -27,72 +29,80 @@ const STEPS = [
 
 export default function HowItWorks() {
   const sectionRef = useRef<HTMLElement>(null)
+  const stickyRef = useRef<HTMLDivElement>(null)
   const [activeStep, setActiveStep] = useState(0)
-  const [isPinned, setIsPinned] = useState(false)
 
-  const scrollToStep = (index: number, button?: HTMLButtonElement) => {
-    setActiveStep(index)
+  useEffect(() => {
+    registerGSAP()
 
     const section = sectionRef.current
-    if (!section) return
+    const sticky = stickyRef.current
+    if (!section || !sticky) return
 
-    const shouldPin = window.matchMedia('(min-width: 1024px)').matches
+    const mm = gsap.matchMedia()
 
-    if (!shouldPin) {
-      button?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    mm.add('(min-width: 1024px)', () => {
+      // ScrollTrigger reads position via the GSAP ticker, which Lenis drives.
+      // This ensures progress updates correctly with smooth scroll active.
+      const trigger = ScrollTrigger.create({
+        trigger: section,
+        pin: sticky,
+        pinSpacing: true,
+        start: 'top top',
+        end: () => `+=${STEPS.length * window.innerHeight}`,
+        onUpdate: (self) => {
+          setActiveStep(
+            Math.min(Math.floor(self.progress * STEPS.length), STEPS.length - 1)
+          )
+        },
+      })
+
+      return () => trigger.kill()
+    })
+
+    return () => mm.revert()
+  }, [])
+
+  const scrollToStep = (index: number) => {
+    if (!window.matchMedia('(min-width: 1024px)').matches) {
+      setActiveStep(index)
       return
     }
 
-    const scrollableDistance = Math.max(section.offsetHeight - window.innerHeight, 0)
-    const progress = STEPS.length > 1 ? index / (STEPS.length - 1) : 0
-    const targetTop = section.offsetTop + scrollableDistance * progress
+    const trigger = ScrollTrigger.getAll().find(
+      (t) => t.vars.trigger === sectionRef.current
+    )
+    if (!trigger) {
+      setActiveStep(index)
+      return
+    }
 
-    window.scrollTo({
-      top: targetTop,
-      behavior: 'smooth',
-    })
+    const start = trigger.start as number
+    const end = trigger.end as number
+    const target = start + (index / STEPS.length) * (end - start)
+
+    const lenis = getLenis()
+    if (lenis) {
+      lenis.scrollTo(target, { duration: 1.2 })
+    } else {
+      window.scrollTo({ top: target, behavior: 'smooth' })
+    }
   }
-
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
-
-    const applyLayout = () => {
-      const shouldPin = window.matchMedia('(min-width: 1024px)').matches
-      setIsPinned(shouldPin)
-      section.style.height = shouldPin ? `${STEPS.length * 82 + 92}vh` : 'auto'
-    }
-
-    const onScroll = () => {
-      if (!window.matchMedia('(min-width: 1024px)').matches) return
-
-      const rect = section.getBoundingClientRect()
-      const available = rect.height - window.innerHeight
-      const progress = available > 0 ? Math.max(0, Math.min(1, -rect.top / available)) : 0
-      setActiveStep(Math.min(Math.floor(progress * STEPS.length), STEPS.length - 1))
-    }
-
-    applyLayout()
-    onScroll()
-    window.addEventListener('resize', applyLayout)
-    window.addEventListener('scroll', onScroll, { passive: true })
-
-    return () => {
-      section.style.height = 'auto'
-      window.removeEventListener('resize', applyLayout)
-      window.removeEventListener('scroll', onScroll)
-    }
-  }, [])
 
   return (
     <section
       ref={sectionRef}
       id="how-it-works"
-      className={isPinned ? '' : 'section-pad'}
       style={{ background: 'var(--bg-surface)', borderTop: '1px solid var(--line)' }}
     >
-      <div className="lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center" style={{ background: 'var(--bg-surface)' }}>
+      <div
+        ref={stickyRef}
+        className="section-pad lg:p-0 lg:h-screen lg:flex lg:items-center"
+        style={{ background: 'var(--bg-surface)' }}
+      >
         <div className="container-shell grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(360px,0.65fr)] lg:gap-20">
+
+          {/* Left: steps list */}
           <div className="flex flex-col gap-9 lg:gap-12">
             <div className="reveal">
               <p className="section-kicker mb-4">Como funciona</p>
@@ -117,7 +127,7 @@ export default function HowItWorks() {
                       background: selected ? 'var(--bg-elevated)' : 'transparent',
                       borderColor: selected ? 'var(--line-accent)' : 'transparent',
                     }}
-                    onClick={(event) => scrollToStep(index, event.currentTarget)}
+                    onClick={() => scrollToStep(index)}
                   >
                     <span className="flex items-center gap-5">
                       <span
@@ -144,6 +154,7 @@ export default function HowItWorks() {
                       />
                     </span>
 
+                    {/* Mobile: description inline */}
                     <span
                       className="mt-3 block pl-[3.25rem] text-sm leading-relaxed lg:hidden"
                       style={{ color: selected ? 'var(--text-secondary)' : 'var(--text-dim)' }}
@@ -156,6 +167,7 @@ export default function HowItWorks() {
             </div>
           </div>
 
+          {/* Right: detail card (desktop only) */}
           <div className="hidden items-center lg:flex">
             <div
               key={activeStep}
@@ -201,7 +213,7 @@ export default function HowItWorks() {
       <style>{`
         @keyframes fadeSlideUp {
           from { opacity: 0; transform: translateY(12px); }
-          to { opacity: 1; transform: translateY(0); }
+          to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </section>
