@@ -46,7 +46,7 @@ export default function HowItWorks() {
       // This ensures progress updates correctly with smooth scroll active.
       const trigger = ScrollTrigger.create({
         trigger: section,
-        pin: sticky,
+        pin: section,
         pinSpacing: true,
         start: 'top top',
         end: () => `+=${STEPS.length * window.innerHeight}`,
