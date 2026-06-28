@@ -6,6 +6,7 @@ import Services from '@/components/sections/Services'
 import HowItWorks from '@/components/sections/HowItWorks'
 import CaseStudies from '@/components/sections/CaseStudies'
 import Results from '@/components/sections/Results'
+import About from '@/components/sections/About'
 import FAQ from '@/components/sections/FAQ'
 import Contact from '@/components/sections/Contact'
 import ScrollProgress from '@/components/ui/ScrollProgress'
@@ -23,6 +24,7 @@ export default function Home() {
         <HowItWorks />
         <CaseStudies />
         <Results />
+        <About />
         <FAQ />
         <Contact />
       </main>
